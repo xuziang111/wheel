@@ -14,4 +14,26 @@ let dom={
         })
         return element
     },
+    //深拷贝不考虑函数正则等
+    JSONcopy:function(obj){
+        return JSON.parse(JSON.stringify)
+    },
+    //深拷贝2
+    deepCopy: function (object){
+        var object2
+        if(! (object instanceof Object) ){
+            return object
+        }else if(object instanceof Array){
+            object2 = []
+        }else if(object instanceof Function){
+            object2 = eval(object.toString())
+        }else if(object instanceof Object){
+            object2 = {}
+        }
+
+        for(let key in object){
+            object2[key] = clone(object[key])
+        }
+        return object2
+    }
 }
