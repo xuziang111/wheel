@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body{margin:0;padding:0;}
+        #topbar{
+            background:blue;
+            height:60px;
+            color:white;
+            text-align:center;
+        }
+        #topbar.sticky{
+            position:fixed;
+            top:0;
+            left:0;
+            width:100%;
+        }
+        .topbarWrapper{
+            height:60px;
+        }
+        main{
+            background:#ddd;
+            height:2000px;
+        }
+        .button.sticky{
+            position:fixed;
+        }
+    </style>
+</head>
+<body>
+    <div class="topbarWrapper">
+        <div id="topbar">
+            topbar
+        </div>
+    </div>
+    
+    <main>
+        使用方法<code>new Sticky(selector,n)</code>
+        <p>第一个参数为需要固定的元素，第二个为固定元素与屏幕顶端的距离</p>
+        <p>段落</p>
+        <p>段落</p>
+        <p>段落</p>
+        <p>段落</p>
+        <button class="button">test</button>
+        <p>段落</p>
+        <p>段落</p>
+        <p>段落</p>
+        <p>段落</p>
+        <p>段落</p>
+        <p>段落</p>
+        <p>段落</p>
+        <p>段落</p>
+    </main>
+
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        class Sticky{
+            constructor(selector,n){
+                this.elements = $(selector)
+                this.offset = n || 0
+                this.addWrapper()
+                this.cacheOffesets()
+                this.listenScroll()
+            }
+            addWrapper(){ //向选中元素外加一个标签，占住原来的位置
+                this.elements.each((index,element)=>{
+                    console.log(element)
+                    var $wrapper = $(`<div class="stickyWrapper"></div>`)
+                    $(element).wrap($wrapper)
+                    $(element).parent().height($(element).height()) 
+                })
+            }
+            cacheOffesets(){//记录元素到文档的高度
+                this.offsets = []
+                this.elements.each((index,element)=>{
+                    this.offsets[index]=$(element).offset()
+                })
+            }
+            listenScroll(){//监听滚动事件
+                $(window).on('scroll',()=>{
+                    var scrollY = window.scrollY
+                    this.elements.each((index,element)=>{
+                        var $element = $(element)
+                        if(scrollY + this.offset > this.offsets[index].top){
+                            $element.addClass('sticky').css({top:this.offset})
+                        }else{
+                            $element.removeClass('sticky')
+                        }
+                    })
+                })
+            }
+        }
+        new Sticky('#topbar')
+        new Sticky('.button',80)
+
+    </script>
+</body>
+</html>
