@@ -36,22 +36,22 @@ let dom={
         }
         return object2
     },
-    ajax:function(url,method,success,fail,body,header){
+    ajax:function(obj){
         let request = new XMLHttpRequest()
-        request.open(method,url)
+        request.open(obj.method,obj.url)
         request.onreadystatechange = ()=>{
             if(request.readyState === 4){
                 if(request.status >= 200 && request.status < 300 ){
-                    success(request.responseText,request.status)
+                    obj.success(request.responseText,request.status)
                 }else{
-                    fail(request.responseText,request.status)
+                    obj.fail(request.responseText,request.status)
                 }
             }
         }
-        if(header){
-            for(let i in header)
-            request.setRequestHeader(i,header[i])
+        if(obj.header){
+            for(let i in obj.header)
+            request.setRequestHeader(i,obj.header[i])
         }
-        request.send(body)
+        request.send(obj.body)
     }
 }
