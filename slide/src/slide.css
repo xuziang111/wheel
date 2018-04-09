@@ -1,0 +1,22 @@
+.slidexxx{
+    overflow: hidden;
+}
+.slidexxx>ol{
+    list-style: none;
+    display:flex;
+    margin:0;
+    padding:0;
+    border:2px solid black;
+    width:200px;
+    transition:transform 0.3s;
+}
+.slidexxx>ol>li{
+    width:100%;
+}
+.slidexxx>ol>li img{
+    vertical-align: top;
+}
+.slidexxx-controls{
+    display:flex;
+    justify-content: space-between;
+}
