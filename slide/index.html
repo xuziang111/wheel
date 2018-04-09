@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .slidexxx{
+            overflow: hidden;
+        }
+        .slidexxx>ol{
+            list-style: none;
+            display:flex;
+            margin:0;
+            padding:0;
+            border:2px solid black;
+            width:200px;
+            transition:transform 0.3s;
+        }
+        .slidexxx>ol>li{
+            width:100%;
+        }
+        .slidexxx>ol>li img{
+            vertical-align: top;
+        }
+        .slidexxx-controls{
+            display:flex;
+            justify-content: space-between;
+        }
+        img{
+
+        }
+    </style>
+</head>
+<body>
+        <div class="slide">
+            <ol>
+                <li><img src="./img/5.jpg" width="200"></li>
+                <li><img src="./img/2.jpg" width="200"></li>
+                <li><img src="./img/3.jpg" width="200"></li>
+                <li><img src="./img/4.jpg" width="200"></li>
+            </ol>
+        </div>
+
+        <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+        <script>
+            class Slide {
+                constructor(options){
+                    this.timer=undefined;
+                    this.options = options
+                    this.$element=$(this.options.element)
+                    this.$element.addClass('slidexxx')
+                    this.initHtml()
+                    this.current=0;
+                    if(this.options.autoPlay){
+                        this.play()
+                    }
+                    this.$element.on('mouseenter',()=>{
+                        this.stop();
+                    }).on('mouseleave',()=>{
+                        this.play()
+                    })
+                }
+                //------------------
+                initHtml(){
+                    this.width = this.$element.children('ol').children('li').width()
+                    this.$element.width(this.width)
+                    this.$element.append(`<div class="slidexxx-controls"></div>`)
+                    this.$prev = $(`<button class="slidexxx-prev">上一张</button>`).on('click',()=>this.prev())
+                    this.$next = $(`<button class="slidexxx-next">下一张</button>`).on('click',()=>this.next())
+                    this.$controls = $('.slidexxx-controls')
+                    this.$controls.append(this.$prev).append(this.$next)
+                }
+                go(index){
+                    let $ol = this.$element.children('ol')
+                    let $items = $ol.children('li')
+                    if(index>=$items.length){
+                        index=index%$items.length
+                    }else if(index<0){
+                        index=$items.length-1
+                    }
+                    this.current=index;
+                    $ol.css({transform:`translateX(${-index*this.$element.width()}px)`})
+                }
+                next(){
+                    this.go(this.current+1)
+                }
+                prev(){
+                    this.go(this.current-1)
+                }
+                play(){
+                    this.timer = setInterval(()=>{
+                        this.go(this.current+1)
+                    },2000)
+                }
+                stop(){
+                    console.log(this.timer)
+                    window.clearInterval(this.timer)
+                }
+            }
+
+            var slide = new Slide({
+                element:'.slide',
+                autoPlay:true,
+            })
+        </script>
+</body>
+</html>
